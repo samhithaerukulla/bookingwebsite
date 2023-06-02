@@ -13,6 +13,10 @@ import { ListComponent } from './component/list/list.component';
 import { UserbookingsComponent } from './component/userbookings/userbookings.component';
 import { DashComponent } from './component/dash/dash.component';
 import { DasboardComponent } from './admin/dasboard/dasboard.component';
+import { AdminLoginComponent } from './admin/admin-login/admin-login.component';
+import { AdminRegisterComponent } from './admin/admin-register/admin-register.component';
+import { AdminDash2Component } from './admin/admin-dash2/admin-dash2.component';
+import { AdminBookingsComponent } from './admin/admin-bookings/admin-bookings.component';
 
 const routes: Routes = [
   {path:'login',component:LoginComponent},
@@ -28,7 +32,11 @@ const routes: Routes = [
   {path:'list',component:ListComponent},
   {path:'userbooking',component:UserbookingsComponent},
   {path:'dash',component:ListComponent},
-  {path:'admin/dashboard',component:Dash1Component}
+  {path:'admin/dashboard',component:Dash1Component},
+  {path:'admin/login',component:AdminLoginComponent},
+  {path:'admin/register',component:AdminRegisterComponent},
+  {path:'admin-dash2',component:AdminDash2Component},
+  {path:'admin-bookings',component:AdminBookingsComponent}
 ];
 
 @NgModule({

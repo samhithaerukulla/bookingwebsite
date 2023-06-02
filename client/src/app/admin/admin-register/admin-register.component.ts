@@ -1,34 +1,27 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  selector: 'app-admin-register',
+  templateUrl: './admin-register.component.html',
+  styleUrls: ['./admin-register.component.css']
 })
-export class RegisterComponent {
-
+export class AdminRegisterComponent {
   user = {
-    firstname: "",
-    lastname: "",
-    email: "",
+    HotelName: "",
     password: ""
   };
 
-  constructor(private http: HttpClient,private route:Router) {}
-
-
+  constructor(private http: HttpClient, private route: Router) {}
 
   submitForm(): void {
-    this.http.post('http://localhost:3000/register', this.user)
+    this.http.post('http://localhost:3000/admin/register', this.user)
       .subscribe(
         (res: any) => {
           if (res.message === 'Successfully Registered') {
             window.alert('Registration Successful!');
-            this.route.navigate(['/login']);
+            this.route.navigate(['/admin/login']);
           } else {
             window.alert('Registration Failed!');
           }
@@ -36,9 +29,7 @@ export class RegisterComponent {
         (error) => {
           console.error(error);
           window.alert('Registration Failed!');
-        }
-      );
-  }
-
-
+        }
+      );
+  }
 }

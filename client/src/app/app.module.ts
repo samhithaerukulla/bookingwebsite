@@ -19,11 +19,10 @@ import { Dash1Component } from './admin/dash1/dash1.component';
 import { HomeComponent } from './component/home/home.component';
 import { DashComponent } from './component/dash/dash.component';
 import { UserbookingsComponent } from './component/userbookings/userbookings.component';
-
-
-
-
-
+import { AdminLoginComponent } from './admin/admin-login/admin-login.component';
+import { AdminRegisterComponent } from './admin/admin-register/admin-register.component';
+import { AdminDash2Component } from './admin/admin-dash2/admin-dash2.component';
+import { AdminBookingsComponent } from './admin/admin-bookings/admin-bookings.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +41,11 @@ import { UserbookingsComponent } from './component/userbookings/userbookings.com
     HomeComponent,
     DashComponent,
     UserbookingsComponent,
+    AdminLoginComponent,
+    AdminRegisterComponent,
+    AdminDash2Component,
+    AdminBookingsComponent,
+   
  
  
    

@@ -51,21 +51,24 @@ const BookingSchema = new mongoose.Schema({
   guests: { type: String }
 });
 
+const adminuserSchema = new mongoose.Schema({
+  
+  HotelName: { type: String, required: true, unique: true },
+  password: { type: String, required: true }
+});
+
 
 
 const User=mongoose.model("User",userSchema);
 const Hotel=mongoose.model("Hotel",hotelSchema);
 const Booking = mongoose.model('Booking', BookingSchema);
+const AdminUser=mongoose.model("AdminUser",adminuserSchema);
 
 
 
 
 
 
-
-module.exports=User;
-module.exports=Hotel;
-module.exports=Booking;
 
 
 
@@ -167,11 +170,11 @@ app.post('/login', async (req, res) => {
     }
     
     const isMatch = await bcrypt.compare(password, user.password);
-    const isAdmin = email === "samhitha12@gmail.com" && password === "sam"
+    const isAdmin = email === "admin@gmail.com" && password === "admin"
     console.log(isAdmin)
-    // if (!isMatch) {
-    //   return res.status(401).json({ message: 'Invalid email or password' });
-    // }
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
    
     if(isAdmin){
       const jwtToken = jwt.sign({ userId: user._id }, 'mysecretkey2');
@@ -215,6 +218,83 @@ app.post('/register', async (req, res) => {
     return res.status(500).json({ message: 'Server Error' });
   }
 });
+
+
+app.post('/admin/register', async (req, res) => {
+  const { HotelName, password } = req.body;
+
+  try {
+    const existingUser = await AdminUser.findOne({ HotelName });
+
+    if (existingUser) {
+      return res.status(400).json({ message: 'Admin already exists' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new AdminUser({
+      HotelName,
+      password: hashedPassword
+    });
+
+    const userCreate = await newUser.save();
+
+    return res.status(201).json({ message: 'Successfully Registered' });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+
+
+app.post('/adminlogin', async (req, res) => {
+  const { HotelName, password } = req.body;
+
+  try {
+    const admin = await AdminUser.findOne({ HotelName });
+
+    if (!admin) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const isMatch = await bcrypt.compare(password, admin.password);
+
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const jwtToken = jwt.sign({ userId: admin._id }, 'mysecretkey2');
+   
+    return res.json({ HotelName, jwtToken });
+    
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Server Error' });
+  }
+});
+app.get('/adminbookings/:hotelName', async (req, res) => {
+  try {
+    const HotelName = req.params.hotelName; // Retrieve hotel name from query parameter
+   
+    if (!HotelName) {
+      return res.status(400).json({ error: 'Hotel name is required' });
+    }
+
+    // Retrieve bookings for the specified hotel name
+    const bookings = await Booking.find({ HotelName });
+    
+    // Send bookings as a response
+    res.json(bookings);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+
 
 
   
