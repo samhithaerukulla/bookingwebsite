@@ -83,3 +83,8 @@
   }
 }
 
+.d-flex{
+  height: 90vh;
+  overflow: hidden;
+
+}
