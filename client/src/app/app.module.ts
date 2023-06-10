@@ -23,6 +23,7 @@ import { AdminLoginComponent } from './admin/admin-login/admin-login.component';
 import { AdminRegisterComponent } from './admin/admin-register/admin-register.component';
 import { AdminDash2Component } from './admin/admin-dash2/admin-dash2.component';
 import { AdminBookingsComponent } from './admin/admin-bookings/admin-bookings.component';
+import { HeaderComponent } from './user/header/header.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { AdminBookingsComponent } from './admin/admin-bookings/admin-bookings.co
     AdminRegisterComponent,
     AdminDash2Component,
     AdminBookingsComponent,
+    HeaderComponent,
    
  
  

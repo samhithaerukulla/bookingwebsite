@@ -9,11 +9,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class UserbookingsComponent {
   bookingDetails: any[] = [];
+  isuser=false;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,private route:Router) {
     const userId = localStorage.getItem('userId');
+
     if (userId) {
       this.fetchBookingDetails(userId);
+    }
+    const user=localStorage.getItem('jwtToken')
+    if (!user){
+     this.route.navigate(['/login'])
     }
   }
 

@@ -14,7 +14,9 @@ export class ListComponent {
   
   public isLoading = false
 
-  constructor(private http:HttpClient,private router: Router) { }
+  constructor(private http:HttpClient,private router: Router) { 
+    
+  }
 
   ngOnInit() {
     this.fetchUsers();

@@ -19,7 +19,12 @@ export class BookComponent {
     guests: ""
   };
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router) { }
+  constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router) { 
+    const user=localStorage.getItem('jwtToken')
+    if (!user){
+     this.router.navigate(['/login'])
+    }
+  }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {

@@ -9,7 +9,18 @@ import { Router } from '@angular/router';
 })
 export class DashComponent {
  title="T-Booking"
-constructor( private route:Router){}
+ user=false
+ admin=false
+constructor( private route:Router){
+  const usertoken=localStorage.getItem('adminJwtToken')
+  if (usertoken){
+    this.admin=true
+  }
+  const user=localStorage.getItem('jwtToken')
+    if (user){
+     this.user=true
+    }
+}
 
  onlogout(){
 
@@ -18,4 +29,10 @@ constructor( private route:Router){}
   this.route.navigate(['/login'])
   alert('logout sucessful')
  }
+
+
+
+
 }
+
+

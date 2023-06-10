@@ -29,15 +29,13 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true }
 });
 
-
-
-const hotelSchema=new mongoose.Schema({
-  HotelName: {type: String},
-  Address: { type: String},
-  City: { type: String},
-  Postalcode: { type: String},
+const hotelSchema = new mongoose.Schema({
+  HotelName: { type: String },
+  Address: { type: String },
+  City: { type: String },
+  Postalcode: { type: String },
   image: { type: String },
-  rating: { type: String}
+  rating: { type: String }
 
 });
 
@@ -52,47 +50,24 @@ const BookingSchema = new mongoose.Schema({
 });
 
 const adminuserSchema = new mongoose.Schema({
-  
+
   HotelName: { type: String, required: true, unique: true },
   password: { type: String, required: true }
 });
 
 
 
-const User=mongoose.model("User",userSchema);
-const Hotel=mongoose.model("Hotel",hotelSchema);
+const User = mongoose.model("User", userSchema);
+const Hotel = mongoose.model("Hotel", hotelSchema);
 const Booking = mongoose.model('Booking', BookingSchema);
-const AdminUser=mongoose.model("AdminUser",adminuserSchema);
-
-
-
-
-
-
-
-
-
-
-
-app.get('/user', async (req, res) => {
-  try {
-    // Retrieve users from MongoDB
-    const users = await User.find();
-    
-    // Send users as a response
-    res.json(users);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+const AdminUser = mongoose.model("AdminUser", adminuserSchema);
 
 app.post("/addlist", async (request, response) => {
   const hotels = new Hotel(request.body);
 
   try {
     await hotels.save();
-    
+
     response.send(hotels);
 
   } catch (error) {
@@ -105,7 +80,7 @@ app.get('/alllist', async (req, res) => {
   try {
     // Retrieve users from MongoDB
     const hotels = await Hotel.find();
-    
+
     // Send users as a response
     res.json(hotels);
   } catch (error) {
@@ -113,7 +88,7 @@ app.get('/alllist', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
- 
+
 
 
 app.post('/book', (req, res) => {
@@ -128,12 +103,11 @@ app.post('/book', (req, res) => {
     });
 });
 
-
 app.get('/allbookings', async (req, res) => {
   try {
     // Retrieve users from MongoDB
     const booking = await Booking.find();
-    
+
     // Send users as a response
     res.json(booking);
   } catch (error) {
@@ -157,34 +131,32 @@ app.get('/booking-details', (req, res) => {
 
 
 
-
-
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const user = await User.findOne({ email });
-    
+
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
-    
+
     const isMatch = await bcrypt.compare(password, user.password);
     const isAdmin = email === "admin@gmail.com" && password === "admin"
     console.log(isAdmin)
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
-   
-    if(isAdmin){
+
+    if (isAdmin) {
       const jwtToken = jwt.sign({ userId: user._id }, 'mysecretkey2');
       return res.json({ user, jwtToken });
-    }else{
+    } else {
       const token = jwt.sign({ userId: user._id }, 'mysecretkey1');
       console.log(token)
       return res.json({ user, token });
     }
-    
+
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Server Error' });
@@ -193,31 +165,38 @@ app.post('/login', async (req, res) => {
 
 app.post('/register', async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
-
   try {
     const existingUser = await User.findOne({ email });
-
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
-
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const newUser = new User({
       firstname,
       lastname,
       email,
       password: hashedPassword
     });
-
     const userCreated = await newUser.save();
-
     return res.status(201).json({ message: 'Successfully Registered' });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Server Error' });
   }
 });
+
+app.get('/user', async (req, res) => {
+  try {
+    // Retrieve users from MongoDB
+    const users = await User.find();
+    // Send users as a response
+    res.json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 
 app.post('/admin/register', async (req, res) => {
@@ -265,26 +244,27 @@ app.post('/adminlogin', async (req, res) => {
     }
 
     const jwtToken = jwt.sign({ userId: admin._id }, 'mysecretkey2');
-   
+
     return res.json({ HotelName, jwtToken });
-    
+
 
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: 'Server Error' });
   }
 });
+
 app.get('/adminbookings/:hotelName', async (req, res) => {
   try {
     const HotelName = req.params.hotelName; // Retrieve hotel name from query parameter
-   
+
     if (!HotelName) {
       return res.status(400).json({ error: 'Hotel name is required' });
     }
 
     // Retrieve bookings for the specified hotel name
     const bookings = await Booking.find({ HotelName });
-    
+
     // Send bookings as a response
     res.json(bookings);
   } catch (error) {
@@ -294,13 +274,7 @@ app.get('/adminbookings/:hotelName', async (req, res) => {
 });
 
 
-
-
-
-  
-
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
 
- 
