@@ -274,7 +274,68 @@ app.get('/adminbookings/:hotelName', async (req, res) => {
 });
 
 
+app.delete('/alllist/:id', async (req, res) => {
+  const itemId = req.params.id;
+
+  try {
+    const result = await Hotel.findByIdAndDelete(itemId);
+    if (!result) {
+      return res.status(404).json({ error: 'Item not found.' });
+    }
+    return res.status(204).end();
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'An error occurred while deleting the item.' });
+  }
+});
+
+
+
+
+
+
+// GET request to fetch hotel details
+app.get('/listall/:id', (req, res) => {
+  const id = req.params.id;
+
+  // Find the hotel document by _id
+  Hotel.findById(id)
+    .then(hotel => {
+      if (!hotel) {
+        res.status(404).json({ error: 'Hotel not found' });
+      } else {
+        res.json(hotel);
+      }
+    })
+    .catch(err => {
+      console.error('Error fetching hotel details:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
+});
+
+// PUT request to update hotel details
+app.put('/listall/:id', (req, res) => {
+  const id = req.params.id;
+  const updatedHotel = req.body;
+
+  // Update the hotel document by _id
+  Hotel.findByIdAndUpdate(id, updatedHotel, { new: true })
+    .then(hotel => {
+      if (!hotel) {
+        res.status(404).json({ error: 'Hotel not found' });
+      } else {
+        res.sendStatus(200);
+      }
+    })
+    .catch(err => {
+      console.error('Error updating hotel details:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
+});
+
+
+
+
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
-
